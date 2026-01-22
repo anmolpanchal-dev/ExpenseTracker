@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="completeSiteContainer">
+        <!-- Navbar-->
+        <div id="navbar">
+            <div id="nameContainer">
+                <img src="" alt="img">
+                <p>Expense Tracker</p>
+            </div>
+            <div id="linksContainer">
+                <a href="#">Monthly Summary</a>
+                <a href="#">Setting</a>
+                <p>Dark Mode</p>
+            </div>
+        </div>
+        <!-- Heading -->
+        <div id="subHeading">
+            <p class="lineOne">Personal Expense Tracker</p>
+            <p class="secondLine">Track your spending & manage your budget easily</p>
+        </div>
+        <!-- main container -->
+        <div id="mainContainer">
+            <div id="inputSection">
+                <span><p>Add New Expense</p></span>
+                <div id="inputFields">
+                    <input type="text" placeholder="Amount" id="amountInput">
+                    <select name="category" id="categorySelect">
+                        <option value="" disabled selected>Category</option>
+                        <option value="food">Food</option>
+                        <option value="transport">Transport</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="utilities">Utilities</option>
+                        <option value="others">Others</option>
+                    </select>
+                    <textarea 
+                        id="description" 
+                        name="description"
+                        placeholder="Enter description here..."
+                        rows="5"
+                        cols="40">
+                    </textarea>
+                    <button id="addExpenses">Add Expense</button>
+                </div>
+            </div>
+            <div id="amountShowing">
+                <div id="monthlySpending">
+                    <h5>This Month's Spending</h5>
+                </div>
+
+                <div id="budget">
+
+                </div>
+            </div>
+            <div id="overview">
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
