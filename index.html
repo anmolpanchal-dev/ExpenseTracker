@@ -30,6 +30,9 @@
         <div id="mainContainer">
             <div id="inputSection">
                 <span><p>Add New Expense</p></span>
+                <div id="monthlyBudget">
+                    <input type="text" placeholder="Budget">
+                </div>
                 <div id="inputFields">
                     <input type="text" placeholder="Amount" id="amountInput">
                     <select name="category" id="categorySelect">
@@ -52,11 +55,18 @@
             </div>
             <div id="amountShowing">
                 <div id="monthlySpending">
-                    <h5>This Month's Spending</h5>
+                    <p class="title">This Month's Spending</p>
+                    <p class="amount">₹ 0</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
                 </div>
-
                 <div id="budget">
-
+                    <p class="title">Monthly Budget</p>
+                    <p class="amount">₹ 12,350</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
                 </div>
             </div>
             <div id="overview">
@@ -64,5 +74,7 @@
             </div>
         </div>
     </div>
+
+    <script src="js/amount.js"></script>
 </body>
 </html>
