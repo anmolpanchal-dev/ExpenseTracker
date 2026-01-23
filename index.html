@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
-    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+    <link rel="icon" href="assets/images/icons8-card-wallet-64.png" type="image/x-icon">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -12,8 +12,12 @@
         <!-- Navbar-->
         <div id="navbar">
             <div id="nameContainer">
-                <img src="" alt="img">
+                <img src="assets/images/icons8-card-wallet-64.png" alt="img">
                 <p>Expense Tracker</p>
+            </div>
+            <div id="monthlyBudget">
+                <input type="text" placeholder="Enter your monthly budget" id="budgetInput">
+                <button id="setBudget">Set</button> 
             </div>
             <div id="linksContainer">
                 <a href="#">Monthly Summary</a>
@@ -30,26 +34,18 @@
         <div id="mainContainer">
             <div id="inputSection">
                 <span><p>Add New Expense</p></span>
-                <div id="monthlyBudget">
-                    <input type="text" placeholder="Budget">
-                </div>
-                <div id="inputFields">
+                
+                <div id="inputFields"> 
                     <input type="text" placeholder="Amount" id="amountInput">
                     <select name="category" id="categorySelect">
-                        <option value="" disabled selected>Category</option>
+                        <option value="" disabled selected>Select Category</option>
                         <option value="food">Food</option>
                         <option value="transport">Transport</option>
                         <option value="entertainment">Entertainment</option>
                         <option value="utilities">Utilities</option>
                         <option value="others">Others</option>
                     </select>
-                    <textarea 
-                        id="description" 
-                        name="description"
-                        placeholder="Enter description here..."
-                        rows="5"
-                        cols="40">
-                    </textarea>
+                    <textarea id="description" name="description" placeholder="Enter description here..." rows="5" cols="40"></textarea>
                     <button id="addExpenses">Add Expense</button>
                 </div>
             </div>
@@ -63,18 +59,20 @@
                 </div>
                 <div id="budget">
                     <p class="title">Monthly Budget</p>
-                    <p class="amount">₹ 12,350</p>
+                    <p class="bgtAmount">₹ 0</p>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
                     </div>
                 </div>
             </div>
             <div id="overview">
-
+                <ul class="expense-list"></ul>
             </div>
         </div>
     </div>
-
-    <script src="js/amount.js"></script>
+    
+    <script type="module" src="js/store.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
+<!-- mobhelp@pnb.bank.in -->
