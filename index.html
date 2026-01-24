@@ -17,7 +17,7 @@
             </div>
             <div id="monthlyBudget">
                 <input type="text" placeholder="Enter your monthly budget" id="budgetInput">
-                <button id="setBudget">Set</button> 
+                <button id="setBudget"  type="button">Set</button> 
             </div>
             <div id="linksContainer">
                 <a href="#">Monthly Summary</a>
@@ -46,6 +46,7 @@
                         <option value="others">Others</option>
                     </select>
                     <textarea id="description" name="description" placeholder="Enter description here..." rows="5" cols="40"></textarea>
+                    <h6 id="warning">A</h6>
                     <button id="addExpenses">Add Expense</button>
                 </div>
             </div>
@@ -58,6 +59,8 @@
                     </div>
                 </div>
                 <div id="budget">
+                    <p class="title">Remaining Amount</p>
+                    <p class="remainingAmount">₹ 0</p>
                     <p class="title">Monthly Budget</p>
                     <p class="bgtAmount">₹ 0</p>
                     <div class="progress-bar">
@@ -65,9 +68,9 @@
                     </div>
                 </div>
             </div>
-            <div id="overview">
-                <ul class="expense-list"></ul>
-            </div>
+        </div>
+        <div id="overview">
+            <ul class="expense-list"></ul>
         </div>
     </div>
     
@@ -75,4 +78,3 @@
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
-<!-- mobhelp@pnb.bank.in -->

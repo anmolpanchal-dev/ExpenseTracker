@@ -1,60 +1,72 @@
 import { data } from "./store.js";
 
-// DOM Elements
+// ===== DOM Elements =====
 const budgetInput = document.querySelector("#budgetInput");
 const budgetDisplay = document.querySelector(".bgtAmount");
+const warnMsg = document.querySelector("#warning");
 
 const spendInput = document.querySelector("#amountInput");
 const categoryInput = document.querySelector("#categorySelect");
 const noteInput = document.querySelector("#description");
 const addBtn = document.querySelector("#addExpenses");
+const budgetBox = document.querySelector("#monthlyBudget");
 
 const totalDisplay = document.querySelector(".amount");
-const expenseList = document.querySelector(".expense-list"); 
-
+const expenseList = document.querySelector(".expense-list");
+const remAmount = document.querySelector(".remainingAmount");
 const setBudgetBtn = document.querySelector("#setBudget");
 
+// ===== State =====
 let totalSpend = 0;
 
-// ===== Load saved budget if exists =====
-let savedBudget = Number(localStorage.getItem("monthlyBudget")) || 0;
+// ===== Load Budget =====
+const savedBudget = Number(localStorage.getItem("monthlyBudget")) || 0;
 budgetDisplay.innerText = `₹ ${savedBudget}`;
 
-// Calculate total spend from saved data
+// ===== Load Expenses & Total =====
 data.forEach(exp => totalSpend += exp.amount);
 updateTotalDisplay();
 renderExpenses();
+updateRemainingAmount();
 
 // ===== Event Listeners =====
 setBudgetBtn.addEventListener("click", () => {
     const budgetValue = Number(budgetInput.value);
-    if (!budgetValue) return alert("Enter a valid budget");
+
+    if (isNaN(budgetValue) || budgetValue <= 0){
+    alert("Please enter a valid Amount");
+    budgetInput.value = "";
+    return;
+    }
+
     localStorage.setItem("monthlyBudget", budgetValue);
     budgetDisplay.innerText = `₹ ${budgetValue}`;
-    budgetInput.value = '';
+    budgetInput.value = "";
+
+    updateRemainingAmount();
 });
 
 addBtn.addEventListener("click", () => {
     const amount = Number(spendInput.value);
-    const categoryVal = categoryInput.value;
-    const noteVal = noteInput.value;
+    const category = categoryInput.value;
+    const note = noteInput.value || "";
 
-    if (!amount || categoryVal === "select") {
-        return alert("Fill both Amount and Category");
+    if (amount <= 0 || category === "select") {
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter both fields";
+        return;
+    } else if (isNaN(amount) || Number(amount) <= 0) {
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter a valid amount";
+        return;
     }
-
-    const expense = {
-        amount,
-        category: categoryVal,
-        note: noteVal || categoryVal
-    };
+    const expense = { amount, category, note };
 
     addExpense(expense);
 
-    // Clear inputs
-    spendInput.value = '';
-    categoryInput.value = '';
-    noteInput.value = '';
+    spendInput.value = "";
+    categoryInput.value = "";
+    noteInput.value = "";
 });
 
 // ===== Functions =====
@@ -64,7 +76,7 @@ function addExpense(expense) {
 
     totalSpend += expense.amount;
     updateTotalDisplay();
-
+    updateRemainingAmount();
     renderExpense(expense);
 }
 
@@ -72,13 +84,34 @@ function updateTotalDisplay() {
     totalDisplay.innerText = `₹ ${totalSpend}`;
 }
 
+function updateRemainingAmount() {
+    const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
+    const remaining = budgetValue - totalSpend;
+
+    localStorage.setItem("remainAmount", remaining);
+    remAmount.innerText = `₹ ${remaining}`;
+    if (remaining < 0) {
+    remAmount.style.color = "red";
+    }
+
+}
+
 function renderExpenses() {
-    expenseList.innerHTML = '';
+    expenseList.innerHTML = "";
     data.forEach(exp => renderExpense(exp));
 }
 
 function renderExpense(expense) {
-    const li = document.createElement("li");
-    li.innerText = `${expense.category}: ₹ ${expense.amount} (${expense.note})`;
-    expenseList.appendChild(li);
+  const item = document.createElement("div");
+  item.className = "displayItem";
+  if(data.length === 0){
+    item.innerHTML = 'No'
+  }
+  item.innerHTML = `
+  <div class="category">${expense.category}</div>
+  <div class="amount2">₹ ${expense.amount}</div>
+  <div class="note">${expense.note}</div>
+  `;
+
+  expenseList.appendChild(item);
 }
