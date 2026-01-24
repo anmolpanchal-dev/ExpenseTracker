@@ -28,11 +28,11 @@ body{
    NAVBAR
 ========================= */
 #navbar{
-  height:64px;
   display:flex;
+  flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  padding:0 24px;
+  padding:10px 24px;
   background:linear-gradient(90deg,var(--secondary),var(--primary));
   color:white;
   box-shadow:0 6px 18px rgba(0,0,0,0.15);
@@ -42,57 +42,65 @@ body{
   display:flex;
   align-items:center;
   gap:10px;
-  font-size:20px;
+  font-size:18px;
   font-weight:600;
+  flex:1;
 }
 
 #nameContainer img{
   height:22px;
 }
 
-
 #monthlyBudget{
   display: flex;
   align-items: center;
   height: 38px;
-  width: 320px;             
+  width: 100%;
+  max-width: 320px;             
   overflow: hidden;
   transition: width 0.4s ease;
+  margin: 8px 0;
 }
 
-/* Input field */
 #budgetInput{
-  width: 240px;
+  width: 70%;
   height: 100%;
   padding-left: 14px;
-
   border: none;
   outline: none;
-
   border-radius: 20px 0 0 20px;
   transition: width 0.4s ease, opacity 0.3s ease;
 }
 
-/* Button */
 #setBudget{
-  width: 80px;
+  width: 30%;
   height: 100%;
   border: none;
-
   background: #7dd36f;
   font-weight: 600;
   cursor: pointer;
-
   border-radius: 0 20px 20px 0;
   transition: all 0.4s ease;
 }
 
+#monthlyBudget.shrink #budgetInput{
+  width:0;
+  padding:0;
+  opacity:0;
+}
 
-/* ===== Nav links ===== */
+#monthlyBudget.shrink #setBudget{
+  width: 100%;
+  border-radius: 20px;
+}
+
 #linksContainer{
   display:flex;
-  gap:22px;
+  flex-wrap:wrap;
+  gap:15px;
   align-items:center;
+  flex:1;
+  justify-content:flex-end;
 }
 
 #linksContainer a,
@@ -114,19 +122,19 @@ body{
 ========================= */
 #subHeading{
   text-align:center;
-  padding:28px 0;
+  padding:28px 10px;
 }
 
 .lineOne{
-  font-size:36px;
+  font-size:28px;
   font-weight:700;
   color:var(--primary);
 }
 
 .secondLine{
-  font-size:16px;
+  font-size:14px;
   color:var(--muted);
-  margin-top:8px;
+  margin-top:6px;
 }
 
 /* =========================
@@ -134,27 +142,29 @@ body{
 ========================= */
 #mainContainer{
   display:flex;
-  gap:32px;
-  padding:32px;
-  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:20px;
+  padding:20px;
+  justify-content:center;
 }
 
 /* =========================
    INPUT CARD
 ========================= */
 #inputSection{
-  width:32%;
+  flex:1 1 300px;
+  max-width: 400px;
   background:var(--card);
-  padding:28px;
-  border-radius:20px;
-  box-shadow:0 14px 35px rgba(0,0,0,0.08);
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.08);
 }
 
 #inputSection p{
-  font-size:18px;
+  font-size:16px;
   font-weight:600;
   color:var(--primary);
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
 #inputFields{
@@ -166,22 +176,24 @@ body{
 #inputFields select,
 #inputFields textarea,
 #inputFields button{
-  height:42px;
+  height:40px;
   border-radius:10px;
   border:1px solid var(--border);
   padding:0 14px;
-  margin-top:16px;
+  margin-top:14px;
   font-size:14px;
   transition:0.25s;
 }
+
 #warning {
   margin-left: 10px;
   height: 16px;
 }
+
 #inputFields textarea{
-  height:80px;
+  height:70px;
   resize:none;
-  padding-top:10px;
+  padding-top:8px;
 }
 
 #inputFields input:focus,
@@ -193,7 +205,7 @@ body{
 }
 
 #addExpenses{
-  height:45px;
+  height:42px;
   border:none;
   border-radius:12px;
   background:linear-gradient(90deg,var(--secondary),var(--primary));
@@ -211,19 +223,20 @@ body{
    AMOUNT CARDS
 ========================= */
 #amountShowing{
-  width:30%;
+  flex:1 1 250px;
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:18px;
+  min-width:250px;
 }
 
 #monthlySpending,
 #budget{
-  padding:26px;
-  border-radius:22px;
+  padding:20px;
+  border-radius:18px;
   color:white;
   background:linear-gradient(135deg,var(--secondary),var(--primary));
-  box-shadow:0 16px 38px rgba(0,0,0,0.18);
+  box-shadow:0 14px 32px rgba(0,0,0,0.15);
 }
 
 .title{
@@ -234,9 +247,9 @@ body{
 .amount,
 .bgtAmount,
 .remainingAmount{
-  font-size:34px;
+  font-size:28px;
   font-weight:700;
-  margin:12px 0 18px;
+  margin:12px 0 16px;
 }
 
 /* =========================
@@ -244,7 +257,7 @@ body{
 ========================= */
 .progress-bar{
   width:100%;
-  height:12px;
+  height:10px;
   background:rgba(255,255,255,0.35);
   border-radius:20px;
   overflow:hidden;
@@ -261,21 +274,24 @@ body{
    OVERVIEW / LIST
 ========================= */
 #overview{
-  margin:0 32px 32px;
+  width:100%;
   background:var(--card);
-  border-radius:20px;
-  padding:24px;
-  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 28px rgba(0,0,0,0.08);
 }
 
 .expense-list{
   list-style:none;
+  padding:0;
+  margin:0;
 }
 
 .expense-list li{
   display:flex;
+  flex-wrap:wrap;
   justify-content:space-between;
-  padding:14px;
+  padding:12px 10px;
   border-bottom:1px solid var(--border);
   font-size:14px;
 }
@@ -288,16 +304,20 @@ body{
   cursor:pointer;
 }
 
+/* =========================
+   EXPENSE ITEM GRID
+========================= */
 .displayItem{
   display:grid;
   grid-template-columns: 1fr 1fr 2fr;
   align-items:center;
-  padding:14px 18px;
-  margin-bottom:12px;
+  padding:10px 14px;
+  margin-bottom:10px;
   background:#fff;
   border-radius:12px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  box-shadow:0 6px 16px rgba(0,0,0,0.08);
   font-size:14px;
+  word-wrap: break-word;
 }
 
 .category{
@@ -311,4 +331,97 @@ body{
 
 .note{
   color:#666;
+}
+
+/* =========================
+   MEDIA QUERIES – RESPONSIVE
+========================= */
+@media (max-width:1024px){
+  #mainContainer{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  #amountShowing{
+    width:100%;
+    max-width:350px;
+    flex-direction:row;
+    justify-content:space-between;
+  }
+
+  #monthlySpending, #budget{
+    flex:1 1 45%;
+  }
+}
+
+@media (max-width:768px){
+  #navbar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+    padding:10px 16px;
+  }
+
+  #linksContainer{
+    justify-content:flex-start;
+    gap:10px;
+  }
+
+  #subHeading{
+    padding:16px 10px;
+  }
+
+  #lineOne{
+    font-size:24px;
+  }
+
+  #secondLine{
+    font-size:13px;
+  }
+
+  #inputSection, #amountShowing{
+    width:90%;
+    max-width:100%;
+  }
+
+  .displayItem{
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap:4px;
+  }
+
+  .note{
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:480px){
+  #navbar, #mainContainer{
+    padding:8px 10px;
+  }
+
+  #inputSection, #amountShowing{
+    width:100%;
+  }
+
+  #monthlySpending, #budget{
+    padding:16px;
+  }
+
+  .amount, .bgtAmount, .remainingAmount{
+    font-size:22px;
+  }
+
+  #addExpenses{
+    font-size:13px;
+    height:40px;
+  }
+
+  .lineOne{
+    font-size:20px;
+  }
+
+  .secondLine{
+    font-size:12px;
+  }
 }
