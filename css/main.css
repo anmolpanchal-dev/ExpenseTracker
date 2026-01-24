@@ -19,6 +19,8 @@
   --muted:#777;
 }
 
+
+
 body{
   background:var(--bg);
   color:var(--text);
@@ -424,4 +426,131 @@ body{
   .secondLine{
     font-size:12px;
   }
+}
+
+
+/* Modal background */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Modal content */
+.modal-content {
+  color: black;
+  position: relative;
+  background: #ffffff;
+  width: 95%;
+  max-width: 520px;
+  max-height: 85vh;
+  padding: 20px;
+  border-radius: 14px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  animation: scaleIn 0.3s ease;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+}
+.modal-content  h2{
+  margin-bottom: 20px;
+}
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 10px;
+}
+
+/* Close button */
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from {transform: translateY(-50px); opacity:0;}
+  to {transform: translateY(0); opacity:1;}
+}
+
+
+/* =========================
+   DARK MODE (class based)
+========================= */
+
+body.dark-mode {
+  --primary: #4f7ecf;
+  --secondary: #6c9ac2;
+  --bg: #1f1f1f;
+  --card: #2b2b2b;
+  --border: #444;
+  --success: #7dd36f;
+  --text: #eee;
+  --muted: #aaa;
+}
+
+body.dark-mode {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body.dark-mode #navbar {
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  color: var(--text);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+body.dark-mode #linksContainer a,
+body.dark-mode #linksContainer p {
+  color: var(--text);
+  opacity: 0.9;
+}
+
+body.dark-mode #inputSection,
+body.dark-mode #overview,
+body.dark-mode .modal-content,
+body.dark-mode #amountShowing > div {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+}
+
+body.dark-mode #inputFields input,
+body.dark-mode #inputFields select,
+body.dark-mode #inputFields textarea,
+body.dark-mode .displayItem {
+  background: #333;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+body.dark-mode #addExpenses,
+body.dark-mode #setBudget {
+  background: var(--primary);
+  color: #fff;
+}
+
+body.dark-mode .progress-bar {
+  background: rgba(255,255,255,0.1);
+}
+
+body.dark-mode .progress-fill {
+  background: var(--success);
 }

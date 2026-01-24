@@ -15,7 +15,7 @@ const totalDisplay = document.querySelector(".amount");
 const expenseList = document.querySelector(".expense-list");
 const remAmount = document.querySelector(".remainingAmount");
 const setBudgetBtn = document.querySelector("#setBudget");
-
+const summaryModalContent = document.querySelector("#item");
 // ===== State =====
 let totalSpend = 0;
 
@@ -60,6 +60,10 @@ addBtn.addEventListener("click", () => {
         warnMsg.innerText = "Enter a valid amount";
         return;
     }
+    if(Number(amount) >= 0){
+        warnMsg.innerText = "";
+
+    }
     const expense = { amount, category, note };
 
     addExpense(expense);
@@ -102,16 +106,60 @@ function renderExpenses() {
 }
 
 function renderExpense(expense) {
-  const item = document.createElement("div");
-  item.className = "displayItem";
-  if(data.length === 0){
-    item.innerHTML = 'No'
-  }
-  item.innerHTML = `
-  <div class="category">${expense.category}</div>
-  <div class="amount2">₹ ${expense.amount}</div>
-  <div class="note">${expense.note}</div>
-  `;
 
-  expenseList.appendChild(item);
+//   const overviewItem = document.createElement("div");
+//   overviewItem.className = "displayItem";
+//   overviewItem.innerHTML = `
+//     <div class="category">${expense.category}</div>
+//     <div class="amount2">₹ ${expense.amount}</div>
+//     <div class="note">${expense.note}</div>
+//   `;
+//   expenseList.appendChild(overviewItem);
+
+
+  const modalItem = document.createElement("div");
+  modalItem.className = "displayItem";
+  modalItem.innerHTML = `
+    <div class="category">${expense.category}</div>
+    <div class="amount2">₹ ${expense.amount}</div>
+    <div class="note">${expense.note}</div>
+  `;
+  summaryModalContent.prepend(modalItem);
 }
+
+
+
+const summaryLink = document.getElementById("monthlySummaryLink");
+const summaryModal = document.getElementById("summaryModal");
+const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
+
+// Open modal
+summaryLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  summaryModal.style.display = "flex";
+});
+
+// Close modal with X
+closeSummaryBtn.addEventListener("click", () => {
+  summaryModal.style.display = "none";
+});
+
+// Close modal when clicking outside content
+window.addEventListener("click", (e) => {
+  if (e.target === summaryModal) {
+    summaryModal.style.display = "none";
+  }
+});
+
+
+const darkModeToggle = document.querySelector("#linksContainer p"); // Dark Mode <p>
+
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+
+  if (document.body.classList.contains("dark-mode")) {
+    darkModeToggle.innerText = "Light Mode";
+  } else {
+    darkModeToggle.innerText = "Dark Mode";
+  }
+});
