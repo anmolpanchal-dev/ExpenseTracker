@@ -183,16 +183,24 @@ function generateChart() {
   const maxAmount = Math.max(...Object.values(categoryTotals), 1);
 
   Object.entries(categoryTotals).forEach(([category, amount]) => {
+    const parent = document.createElement("div");
     const bar = document.createElement("div");
+    const cate = document.createElement("div");
+
+    parent.className = "parentDiv";
     bar.className = "bar";
+    cate.className = "category";
 
     bar.style.height = `${(amount / maxAmount) * 100}%`;
-    bar.innerHTML = `
-      ${category}<br>₹${amount}
-    `;
+    bar.innerText = `₹${amount}`;
+    cate.innerText = category;
 
-    chart.appendChild(bar);
+    parent.appendChild(bar);
+    parent.appendChild(cate);
+
+    chart.appendChild(parent);
   });
+
 }
 
 generateChart();

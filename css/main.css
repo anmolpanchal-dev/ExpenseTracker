@@ -564,19 +564,27 @@ body.dark-mode .progress-fill {
 
 .chart-wrapper{
   width: 100%;
-  overflow-x: auto; /* 👈 fit fix */
+  overflow-x: auto; 
 }
 
 #barChart{
   display: flex;
   align-items: flex-end;
-  gap: 14px;
-  height: 200px;
-  min-width: 350px;
+  gap: 18px;
+  height: 260px;
+  padding: 20px;
 }
 
+.parentDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+
 .bar{
-  width: 60px;        /* 👈 FIXED width */
+  width: 60px;       
   min-height: 20px;
   background: linear-gradient(180deg,var(--secondary),var(--primary));
   border-radius: 10px 10px 0 0;
