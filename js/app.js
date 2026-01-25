@@ -16,8 +16,13 @@ const expenseList = document.querySelector(".expense-list");
 const remAmount = document.querySelector(".remainingAmount");
 const setBudgetBtn = document.querySelector("#setBudget");
 const summaryModalContent = document.querySelector("#item");
+
+const summaryLink = document.getElementById("monthlySummaryLink");
+const summaryModal = document.getElementById("summaryModal");
+const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
 // ===== State =====
 let totalSpend = 0;
+let expenses = [];
 
 // ===== Load Budget =====
 const savedBudget = Number(localStorage.getItem("monthlyBudget")) || 0;
@@ -82,6 +87,7 @@ function addExpense(expense) {
     updateTotalDisplay();
     updateRemainingAmount();
     renderExpense(expense);
+    generateChart();
 }
 
 function updateTotalDisplay() {
@@ -129,9 +135,6 @@ function renderExpense(expense) {
 
 
 
-const summaryLink = document.getElementById("monthlySummaryLink");
-const summaryModal = document.getElementById("summaryModal");
-const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
 
 // Open modal
 summaryLink.addEventListener("click", (e) => {
@@ -163,3 +166,33 @@ darkModeToggle.addEventListener("click", () => {
     darkModeToggle.innerText = "Dark Mode";
   }
 });
+
+function generateChart() {
+  const chart = document.getElementById("barChart");
+  if (!chart) return;
+
+  chart.innerHTML = "";
+
+  const categoryTotals = {};
+
+  data.forEach(exp => {
+    categoryTotals[exp.category] =
+      (categoryTotals[exp.category] || 0) + Number(exp.amount);
+  });
+
+  const maxAmount = Math.max(...Object.values(categoryTotals), 1);
+
+  Object.entries(categoryTotals).forEach(([category, amount]) => {
+    const bar = document.createElement("div");
+    bar.className = "bar";
+
+    bar.style.height = `${(amount / maxAmount) * 100}%`;
+    bar.innerHTML = `
+      ${category}<br>₹${amount}
+    `;
+
+    chart.appendChild(bar);
+  });
+}
+
+generateChart();
