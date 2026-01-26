@@ -30,11 +30,12 @@ body{
    NAVBAR
 ========================= */
 #navbar{
+  height: 60px;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  padding:10px 24px;
+  padding: 0px 20px;
   background:linear-gradient(90deg,var(--secondary),var(--primary));
   color:white;
   box-shadow:0 6px 18px rgba(0,0,0,0.15);
@@ -50,7 +51,7 @@ body{
 }
 
 #nameContainer img{
-  height:22px;
+  height:20px;
 }
 
 #monthlyBudget{
@@ -225,7 +226,7 @@ body{
    AMOUNT CARDS
 ========================= */
 #amountShowing{
-  flex:1 1 250px;
+  flex:1 1 100px;
   display:flex;
   flex-direction:column;
   gap:18px;
@@ -267,8 +268,9 @@ body{
 
 .progress-fill{
   height:100%;
-  width:40%;
-  background:linear-gradient(90deg,#7dd36f,#5fbf55);
+  width:2%;
+  background:linear-gradient(90deg,rgb(80, 181, 80),rgb(56, 181, 56),rgb(90, 192, 90),rgb(40, 187, 40),rgb(240, 69, 69),rgb(237, 34, 34),rgb(241, 11, 11)
+  );
   transition:width 0.4s ease;
 }
 
@@ -556,12 +558,13 @@ body.dark-mode .progress-fill {
 }
 
 #chartSection{
-  margin: 20px;
   padding: 20px;
   background: var(--card);
   border-radius: 16px;
 }
-
+#chartSection h3{
+  margin-bottom: 40px;
+}
 .chart-wrapper{
   width: 100%;
   overflow-x: auto; 
@@ -579,13 +582,16 @@ body.dark-mode .progress-fill {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: end;
   gap: 8px;
+  height: 300px;
 }
 
 
 .bar{
   width: 60px;       
-  min-height: 20px;
+  min-height: 30px;
+  max-height: 200px;
   background: linear-gradient(180deg,var(--secondary),var(--primary));
   border-radius: 10px 10px 0 0;
   display: flex;

@@ -56,7 +56,10 @@ addBtn.addEventListener("click", () => {
     const category = categoryInput.value;
     const note = noteInput.value || "";
 
-    if (amount <= 0 || category === "select") {
+    if(budgetDisplay.innerText === "₹ 0"){
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter Monthly Budget first";
+    } else if (amount <= 0 || category === "select") {
         warnMsg.style.color = "red";
         warnMsg.innerText = "Enter both fields";
         return;
@@ -88,6 +91,7 @@ function addExpense(expense) {
     updateRemainingAmount();
     renderExpense(expense);
     generateChart();
+    progressFill();
 }
 
 function updateTotalDisplay() {
@@ -110,19 +114,7 @@ function renderExpenses() {
     expenseList.innerHTML = "";
     data.forEach(exp => renderExpense(exp));
 }
-
 function renderExpense(expense) {
-
-//   const overviewItem = document.createElement("div");
-//   overviewItem.className = "displayItem";
-//   overviewItem.innerHTML = `
-//     <div class="category">${expense.category}</div>
-//     <div class="amount2">₹ ${expense.amount}</div>
-//     <div class="note">${expense.note}</div>
-//   `;
-//   expenseList.appendChild(overviewItem);
-
-
   const modalItem = document.createElement("div");
   modalItem.className = "displayItem";
   modalItem.innerHTML = `
@@ -203,4 +195,11 @@ function generateChart() {
 
 }
 
+function progressFill(){
+  const progressFill = document.querySelector(".progress-fill");
+  const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
+  progressFill.style.width = `${(totalSpend / budgetValue) * 100}%`
+}
+
 generateChart();
+progressFill();
