@@ -55,6 +55,7 @@ addBtn.addEventListener("click", () => {
     const amount = Number(spendInput.value);
     const category = categoryInput.value;
     const note = noteInput.value || "";
+    const today = new Date().toLocaleDateString("en-IN");
 
     if(budgetDisplay.innerText === "₹ 0"){
         warnMsg.style.color = "red";
@@ -70,9 +71,8 @@ addBtn.addEventListener("click", () => {
     }
     if(Number(amount) >= 0){
         warnMsg.innerText = "";
-
     }
-    const expense = { amount, category, note };
+    const expense = { amount, category, note, today};
 
     addExpense(expense);
 
@@ -121,6 +121,7 @@ function renderExpense(expense) {
     <div class="category">${expense.category}</div>
     <div class="amount2">₹ ${expense.amount}</div>
     <div class="note">${expense.note}</div>
+    <div >${expense.today}</div>
   `;
   summaryModalContent.prepend(modalItem);
 }
@@ -203,3 +204,5 @@ function progressFill(){
 
 generateChart();
 progressFill();
+
+
