@@ -92,6 +92,8 @@ function addExpense(expense) {
     renderExpense(expense);
     generateChart();
     progressFill();
+    renderRecentExpenses();
+
 }
 
 function updateTotalDisplay() {
@@ -202,6 +204,29 @@ function progressFill(){
   progressFill.style.width = `${(totalSpend / budgetValue) * 100}%`
 }
 
+function renderRecentExpenses() {
+  const recentList = document.getElementById("recentList");
+  if (!recentList) return;
+
+  recentList.innerHTML = "";
+
+  const lastFive = data.slice(-5).reverse();
+
+  lastFive.forEach(exp => {
+    const div = document.createElement("div");
+    div.className = "recent-item";
+    div.innerHTML = `
+      <div>
+        <div class="recent-category">${exp.category}</div>
+        <div class="recent-date">${exp.today}</div>
+        </div>
+        <div class="recent-date">${exp.note}</div>
+      <div class="recent-amount">₹ ${exp.amount}</div>
+    `;
+    recentList.appendChild(div);
+  });
+}
+renderRecentExpenses();
 generateChart();
 progressFill();
 
