@@ -1,4 +1,8 @@
+import { renderRecentExpenses } from "./recentExpenses.js";
 import { data } from "./store.js";
+import { generateChart } from "./chart.js";
+renderRecentExpenses(data);
+
 
 // ===== DOM Elements =====
 const budgetInput = document.querySelector("#budgetInput");
@@ -9,7 +13,6 @@ const spendInput = document.querySelector("#amountInput");
 const categoryInput = document.querySelector("#categorySelect");
 const noteInput = document.querySelector("#description");
 const addBtn = document.querySelector("#addExpenses");
-const budgetBox = document.querySelector("#monthlyBudget");
 
 const totalDisplay = document.querySelector(".amount");
 const expenseList = document.querySelector(".expense-list");
@@ -90,9 +93,9 @@ function addExpense(expense) {
     updateTotalDisplay();
     updateRemainingAmount();
     renderExpense(expense);
-    generateChart();
+    generateChart(data);
     progressFill();
-    renderRecentExpenses();
+    renderRecentExpenses(data);
 
 }
 
@@ -162,72 +165,14 @@ darkModeToggle.addEventListener("click", () => {
   }
 });
 
-function generateChart() {
-  const chart = document.getElementById("barChart");
-  if (!chart) return;
 
-  chart.innerHTML = "";
-
-  const categoryTotals = {};
-
-  data.forEach(exp => {
-    categoryTotals[exp.category] =
-      (categoryTotals[exp.category] || 0) + Number(exp.amount);
-  });
-
-  const maxAmount = Math.max(...Object.values(categoryTotals), 1);
-
-  Object.entries(categoryTotals).forEach(([category, amount]) => {
-    const parent = document.createElement("div");
-    const bar = document.createElement("div");
-    const cate = document.createElement("div");
-
-    parent.className = "parentDiv";
-    bar.className = "bar";
-    cate.className = "category";
-
-    bar.style.height = `${(amount / maxAmount) * 100}%`;
-    bar.innerText = `₹${amount}`;
-    cate.innerText = category;
-
-    parent.appendChild(bar);
-    parent.appendChild(cate);
-
-    chart.appendChild(parent);
-  });
-
-}
 
 function progressFill(){
   const progressFill = document.querySelector(".progress-fill");
   const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
   progressFill.style.width = `${(totalSpend / budgetValue) * 100}%`
 }
-
-function renderRecentExpenses() {
-  const recentList = document.getElementById("recentList");
-  if (!recentList) return;
-
-  recentList.innerHTML = "";
-
-  const lastFive = data.slice(-5).reverse();
-
-  lastFive.forEach(exp => {
-    const div = document.createElement("div");
-    div.className = "recent-item";
-    div.innerHTML = `
-      <div>
-        <div class="recent-category">${exp.category}</div>
-        <div class="recent-date">${exp.today}</div>
-        </div>
-        <div class="recent-date">${exp.note}</div>
-      <div class="recent-amount">₹ ${exp.amount}</div>
-    `;
-    recentList.appendChild(div);
-  });
-}
-renderRecentExpenses();
-generateChart();
+generateChart(data);
 progressFill();
 
 
