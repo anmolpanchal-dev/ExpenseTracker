@@ -1,605 +1,564 @@
-/* =========================
-   RESET + THEME
-========================= */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ==================================================
+   1. RESET + DESIGN TOKENS
+================================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-:root{
-  --primary:#6c9ac2;
-  --secondary:#4f7ecf;
-  --bg:#f6f8fc;
-  --card:#ffffff;
-  --border:#e2e6ee;
-  --success:#7dd36f;
-  --text:#2f2f2f;
-  --muted:#777;
+#mainContainer{
+  grid-template-columns: 340px 1fr 1fr;
+
+}
+:root {
+  --primary: #6366f1;
+  --primary-soft: #818cf8;
+  --success: #22c55e;
+  --danger: #ef4444;
+
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --border: #e5e7eb;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+
+  --shadow-sm: 0 6px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 18px 40px rgba(0,0,0,0.15);
 }
 
-
-
-body{
-  background:var(--bg);
-  color:var(--text);
+a{
+  text-decoration: none;
+}
+body.dark-mode {
+  --bg: #020617;
+  --card: #1e293b;
+  --border: #334155;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --shadow-sm: 0 8px 24px rgba(0,0,0,0.6);
+  --shadow-lg: 0 22px 50px rgba(0,0,0,0.7);
 }
 
-/* =========================
-   NAVBAR
-========================= */
-#navbar{
-  height: 60px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  justify-content:space-between;
-  padding: 0px 20px;
-  background:linear-gradient(90deg,var(--secondary),var(--primary));
-  color:white;
-  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  line-height: 1.5;
 }
 
-#nameContainer{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:18px;
-  font-weight:600;
-  flex:1;
-}
-
+/* ==================================================
+   2. NAVBAR
+================================================== */
 #nameContainer img{
-  height:20px;
+  height: 25px;
 }
 
-#monthlyBudget{
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 70px;
+
   display: flex;
   align-items: center;
-  height: 38px;
-  width: 100%;
-  max-width: 320px;             
+  gap: 20px;
+  padding: 0 5%;
+
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+#nameContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+  flex: 1;
+}
+
+#monthlyBudget {
+  flex: 1;
+  max-width: 380px;
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   overflow: hidden;
-  transition: width 0.4s ease;
-  margin: 8px 0;
 }
 
-#budgetInput{
-  width: 70%;
-  height: 100%;
-  padding-left: 14px;
+#budgetInput {
+  flex: 1;
   border: none;
+  background: transparent;
+  padding: 12px 16px;
   outline: none;
-  border-radius: 20px 0 0 20px;
-  transition: width 0.4s ease, opacity 0.3s ease;
+  color: var(--text-main);
 }
 
-#setBudget{
-  width: 30%;
-  height: 100%;
+#setBudget {
+  padding: 0 22px;
   border: none;
-  background: #7dd36f;
-  font-weight: 600;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 0 20px 20px 0;
-  transition: all 0.4s ease;
 }
 
-#monthlyBudget.shrink #budgetInput{
-  width:0;
-  padding:0;
-  opacity:0;
-}
-
-#monthlyBudget.shrink #setBudget{
-  width: 100%;
-  border-radius: 20px;
-}
-
-#linksContainer{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  align-items:center;
-  flex:1;
-  justify-content:flex-end;
+#linksContainer {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
 }
 
 #linksContainer a,
-#linksContainer p{
-  color:white;
-  text-decoration:none;
-  cursor:pointer;
-  opacity:0.9;
-  font-weight:500;
+#linksContainer p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
 }
 
-#linksContainer a:hover,
-#linksContainer p:hover{
-  opacity:1;
+/* ==================================================
+   3. PAGE HEADING
+================================================== */
+#subHeading {
+  text-align: center;
+  padding: 40px 16px 20px;
 }
 
-/* =========================
-   HEADING
-========================= */
-#subHeading{
-  text-align:center;
-  padding:28px 10px;
+.lineOne {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 900;
 }
 
-.lineOne{
-  font-size:28px;
-  font-weight:700;
-  color:var(--primary);
+.secondLine {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
 
-.secondLine{
-  font-size:14px;
-  color:var(--muted);
-  margin-top:6px;
+/* ==================================================
+   4. MAIN DASHBOARD GRID
+================================================== */
+#mainContainer {
+  max-width: 1300px;
+  margin: auto;
+  padding: 20px;
+
+  display: grid;
+  grid-template-columns: 340px 1fr 1fr;
+  gap: 24px;
+  align-items: start;
 }
 
-/* =========================
-   MAIN LAYOUT
-========================= */
-#mainContainer{
-  display:flex;
-  flex-wrap:wrap;
-  gap:20px;
-  padding:20px;
-  justify-content:center;
+#inputSection,
+#chartSection,
+#amountShowing > div {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
-/* =========================
-   INPUT CARD
-========================= */
-#inputSection{
-  flex:1 1 300px;
-  max-width: 400px;
-  background:var(--card);
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 12px 28px rgba(0,0,0,0.08);
-}
-
-#inputSection p{
-  font-size:16px;
-  font-weight:600;
-  color:var(--primary);
-  margin-bottom:16px;
-}
-
-#inputFields{
-  display:flex;
-  flex-direction:column;
+/* ==================================================
+   5. INPUT CARD
+================================================== */
+#inputFields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 #inputFields input,
 #inputFields select,
-#inputFields textarea,
-#inputFields button{
-  height:40px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  padding:0 14px;
-  margin-top:14px;
-  font-size:14px;
-  transition:0.25s;
+#inputFields textarea {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-main);
+  font-size: 0.9rem;
 }
 
-#warning {
-  margin-left: 10px;
-  height: 16px;
-}
-
-#inputFields textarea{
-  height:70px;
-  resize:none;
-  padding-top:8px;
+#inputFields textarea {
+  resize: none;
+  min-height: 80px;
 }
 
 #inputFields input:focus,
 #inputFields select:focus,
-#inputFields textarea:focus{
-  outline:none;
-  border-color:var(--primary);
-  box-shadow:0 0 0 2px rgba(108,154,194,0.25);
+#inputFields textarea:focus {
+  outline: none;
+  border-color: var(--primary);
 }
 
-#addExpenses{
-  height:42px;
-  border:none;
-  border-radius:12px;
-  background:linear-gradient(90deg,var(--secondary),var(--primary));
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:transform 0.2s;
+#addExpenses {
+  margin-top: 6px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: linear-gradient(135deg, var(--primary), var(--primary-soft));
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
 }
 
-#addExpenses:hover{
-  transform:translateY(-2px);
+/* ==================================================
+   6. STATS / AMOUNT CARDS
+================================================== */
+#amountShowing {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
-/* =========================
-   AMOUNT CARDS
-========================= */
-#amountShowing{
-  flex:1 1 100px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  min-width:250px;
-}
-
-#monthlySpending,
-#budget{
-  padding:20px;
-  border-radius:18px;
-  color:white;
-  background:linear-gradient(135deg,var(--secondary),var(--primary));
-  box-shadow:0 14px 32px rgba(0,0,0,0.15);
-}
-
-.title{
-  font-size:14px;
-  opacity:0.9;
+.title {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .amount,
 .bgtAmount,
-.remainingAmount{
-  font-size:28px;
-  font-weight:700;
-  margin:12px 0 16px;
+.remainingAmount {
+  font-size: 1.9rem;
+  font-weight: 900;
+  margin-top: 6px;
 }
 
-/* =========================
-   PROGRESS BAR
-========================= */
-.progress-bar{
-  width:100%;
-  height:10px;
-  background:rgba(255,255,255,0.35);
-  border-radius:20px;
-  overflow:hidden;
+.remainingAmount {
+  color: var(--success);
 }
 
-.progress-fill{
-  height:100%;
-  width: 0%;
-  background:linear-gradient(90deg,rgb(80, 181, 80),rgb(56, 181, 56),rgb(90, 192, 90),rgb(40, 187, 40),rgb(240, 69, 69),rgb(237, 34, 34),rgb(241, 11, 11)
-  );
-  transition:width 0.4s ease;
-}
-
-/* =========================
-   OVERVIEW / LIST
-========================= */
-#overview{
-  width:100%;
-  background:var(--card);
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 10px 28px rgba(0,0,0,0.08);
-}
-
-.expense-list{
-  list-style:none;
-  padding:0;
-  margin:0;
-}
-
-.expense-list li{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  padding:12px 10px;
-  border-bottom:1px solid var(--border);
-  font-size:14px;
-}
-
-.expense-list li:last-child{
-  border-bottom:none;
-}
-
-#monthlyBudget{
-  cursor:pointer;
-}
-
-/* =========================
-   EXPENSE ITEM GRID
-========================= */
-.displayItem{
-  display:grid;
-  grid-template-columns: 1fr 1fr 2fr;
-  align-items:center;
-  padding:10px 14px;
-  margin-bottom:10px;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 6px 16px rgba(0,0,0,0.08);
-  font-size:14px;
-  word-wrap: break-word;
-}
-
-.category{
-  font-weight:600;
-  color:#4f7ecf;
-}
-
-.amount2{
-  font-weight:700;
-}
-
-.note{
-  color:#666;
-}
-
-/* =========================
-   MEDIA QUERIES – RESPONSIVE
-========================= */
-@media (max-width:1024px){
-  #mainContainer{
-    flex-direction:column;
-    align-items:center;
-  }
-
-  #amountShowing{
-    width:100%;
-    max-width:350px;
-    flex-direction:row;
-    justify-content:space-between;
-  }
-
-  #monthlySpending, #budget{
-    flex:1 1 45%;
-  }
-}
-
-@media (max-width:768px){
-  #navbar{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:8px;
-    padding:10px 16px;
-  }
-
-  #linksContainer{
-    justify-content:flex-start;
-    gap:10px;
-  }
-
-  #subHeading{
-    padding:16px 10px;
-  }
-
-  #lineOne{
-    font-size:24px;
-  }
-
-  #secondLine{
-    font-size:13px;
-  }
-
-  #inputSection, #amountShowing{
-    width:90%;
-    max-width:100%;
-  }
-
-  .displayItem{
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap:4px;
-  }
-
-  .note{
-    grid-column:1 / -1;
-  }
-}
-
-@media (max-width:480px){
-  #navbar, #mainContainer{
-    padding:8px 10px;
-  }
-
-  #inputSection, #amountShowing{
-    width:100%;
-  }
-
-  #monthlySpending, #budget{
-    padding:16px;
-  }
-
-  .amount, .bgtAmount, .remainingAmount{
-    font-size:22px;
-  }
-
-  #addExpenses{
-    font-size:13px;
-    height:40px;
-  }
-
-  .lineOne{
-    font-size:20px;
-  }
-
-  .secondLine{
-    font-size:12px;
-  }
-}
-
-
-/* Modal background */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-/* Modal content */
-.modal-content {
-  color: black;
-  position: relative;
-  background: #ffffff;
-  width: 95%;
-  max-width: 520px;
-  max-height: 85vh;
-  padding: 20px;
-  border-radius: 14px;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  animation: scaleIn 0.3s ease;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
-}
-.modal-content  h2{
-  margin-bottom: 20px;
-}
-.modal-content::-webkit-scrollbar {
-  width: 6px;
-}
-.modal-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.modal-content::-webkit-scrollbar-thumb {
-  background: #6366f1;
-  border-radius: 10px;
-}
-
-/* Close button */
-.closeBtn {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes slideIn {
-  from {transform: translateY(-50px); opacity:0;}
-  to {transform: translateY(0); opacity:1;}
-}
-
-
-/* =========================
-   DARK MODE (class based)
-========================= */
-
-body.dark-mode {
-  --primary: #4f7ecf;
-  --secondary: #6c9ac2;
-  --bg: #1f1f1f;
-  --card: #2b2b2b;
-  --border: #444;
-  --success: #7dd36f;
-  --text: #eee;
-  --muted: #aaa;
-}
-
-body.dark-mode {
+/* Progress Bar */
+.progress-bar {
+  margin-top: 14px;
+  height: 10px;
   background: var(--bg);
-  color: var(--text);
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-body.dark-mode #navbar {
-  background: linear-gradient(90deg, var(--secondary), var(--primary));
-  color: var(--text);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    90deg,
+    var(--success),
+    #facc15,
+    var(--danger)
+  );
+  transition: width 0.4s ease;
 }
 
-body.dark-mode #linksContainer a,
-body.dark-mode #linksContainer p {
-  color: var(--text);
-  opacity: 0.9;
-}
-
-body.dark-mode #inputSection,
-body.dark-mode #overview,
-body.dark-mode .modal-content,
-body.dark-mode #amountShowing > div {
-  background: var(--card);
-  color: var(--text);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-}
-
-body.dark-mode #inputFields input,
-body.dark-mode #inputFields select,
-body.dark-mode #inputFields textarea,
-body.dark-mode .displayItem {
-  background: #333;
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-body.dark-mode #addExpenses,
-body.dark-mode #setBudget {
-  background: var(--primary);
-  color: #fff;
-}
-
-body.dark-mode .progress-bar {
-  background: rgba(255,255,255,0.1);
-}
-
-body.dark-mode .progress-fill {
-  background: var(--success);
-}
-
-#chartSection{
-  padding: 20px;
-  background: var(--card);
-  border-radius: 16px;
-}
-#chartSection h3{
-  margin-bottom: 40px;
-}
-.chart-wrapper{
+/* ==================================================
+   7. CHART
+================================================== */
+/* ===== Chart Wrapper ===== */
+.chart-wrapper {
   width: 100%;
-  overflow-x: auto; 
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 
-#barChart{
+/* ===== Bar Chart Container ===== */
+#barChart {
+  height: 260px;
   display: flex;
   align-items: flex-end;
-  gap: 18px;
-  height: 260px;
-  padding: 20px;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 20px 10px;
 }
 
-.parentDiv{
+/* ===== Parent Column ===== */
+.parentDiv {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: end;
-  gap: 8px;
-  height: 240px;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 60px;
 }
 
-
-.bar{
-  width: 60px;       
+/* ===== Bar ===== */
+.bar {
+  min-width: 45px;
   min-height: 30px;
-  max-height: 100%;
-  background: linear-gradient(180deg,var(--secondary),var(--primary));
+  background: linear-gradient(180deg, var(--primary-soft), var(--primary));
   border-radius: 10px 10px 0 0;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 6px;
-  color: white;
-  font-size: 11px;
+  padding-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  transition: height 0.4s ease;
+}
+
+/* ===== Category Label ===== */
+.parentDiv .cate {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: var(--text-muted);
   text-align: center;
-  white-space: normal;
+  max-width: 70px;
+  word-break: break-word;
+}
+
+
+
+/* ==================================================
+   8. EXPENSE LIST
+================================================== */
+.expense-list {
+  max-width: 1300px;
+  margin: 30px auto;
+  padding: 0 20px;
+  list-style: none;
+}
+
+.displayItem {
+  background: var(--card);
+  border-radius: var(--radius-md);
+  padding: 16px 22px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+
+  display: grid;
+  grid-template-columns: 150px 120px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.category {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.amount2 {
+  font-weight: 900;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ==================================================
+   9. RESPONSIVE
+================================================== */
+@media (max-width: 1100px) {
+  #mainContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 16px;
+  }
+
+  #mainContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .displayItem {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* =========================================
+   MONTHLY SUMMARY MODAL
+========================================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+
+/* Modal box */
+.modal-content {
+  position: relative;
+  width: 92%;
+  max-width: 520px;
+  max-height: 80vh;
+
+  background: var(--card);
+  color: var(--text-main);
+
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+
+  display: flex;
+  flex-direction: column;
+
+  animation: modalScale 0.25s ease;
+}
+
+/* Header */
+.modal-content h2 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 18px;
+}
+
+/* Close Button */
+.closeBtn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 28px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: var(--danger);
+  transform: scale(1.1);
+}
+
+/* Scrollable content */
+#item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Custom scrollbar */
+#item::-webkit-scrollbar {
+  width: 6px;
+}
+
+#item::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+#item::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Expense item inside modal */
+#item .displayItem {
+  background: linear-gradient(
+    180deg,
+    var(--card),
+    var(--bg)
+  );
+
+  border-radius: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 6px;
+
+  box-shadow: var(--shadow-sm);
+}
+
+#item .category {
+  font-weight: 800;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+#item .amount2 {
+  font-weight: 900;
+  font-size: 0.95rem;
+}
+
+#item .note {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+#item div:last-child {
+  grid-column: 1 / -1;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   DARK MODE SUPPORT
+========================================= */
+
+body.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+body.dark-mode .modal-content {
+  background: var(--card);
+}
+
+body.dark-mode #item .displayItem {
+  background: linear-gradient(
+    180deg,
+    #1e293b,
+    #020617
+  );
+}
+
+/* =========================================
+   MOBILE OPTIMIZATION
+========================================= */
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 18px;
+    max-height: 85vh;
+  }
+
+  .modal-content h2 {
+    font-size: 1.2rem;
+  }
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes modalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
