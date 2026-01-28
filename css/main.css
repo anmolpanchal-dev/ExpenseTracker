@@ -9,10 +9,6 @@
   box-sizing: border-box;
 }
 
-#mainContainer{
-  grid-template-columns: 340px 1fr 1fr;
-
-}
 :root {
   --primary: #6366f1;
   --primary-soft: #818cf8;
@@ -335,7 +331,7 @@ body {
   list-style: none;
 }
 
-.displayItem {
+#item .displayItem {
   background: var(--card);
   border-radius: var(--radius-md);
   padding: 16px 22px;
@@ -347,11 +343,6 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
-}
-
-.category {
-  font-weight: 800;
-  color: var(--primary);
 }
 
 .amount2 {
@@ -407,17 +398,13 @@ body {
   width: 92%;
   max-width: 520px;
   max-height: 80vh;
-
   background: var(--card);
   color: var(--text-main);
-
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-lg);
-
   display: flex;
   flex-direction: column;
-
   animation: modalScale 0.25s ease;
 }
 

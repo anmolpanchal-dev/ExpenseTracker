@@ -20,7 +20,7 @@ export function generateChart(data) {
 
     parent.className = "parentDiv";
     bar.className = "bar";
-    cate.className = "category";
+    cate.className = "cate";
 
     bar.style.height = `${(amount / maxAmount) * 100}%`;
     bar.innerText = `₹${amount}`;
