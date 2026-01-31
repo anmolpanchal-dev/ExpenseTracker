@@ -1,6 +1,10 @@
 import { renderRecentExpenses } from "./recentExpenses.js";
 import { data } from "./store.js";
 import { generateChart } from "./chart.js";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import OpenAI from "openai";
 renderRecentExpenses(data);
 
 
@@ -177,3 +181,41 @@ generateChart(data);
 progressFill();
 
 
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// AI Helpbot endpoint
+app.post("/helpbot", async (req, res) => {
+  const userMessage = req.body.message;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a simple and friendly help bot for an expense tracking app. Give easy saving tips.",
+        },
+        { role: "user", content: userMessage },
+      ],
+    });
+
+    res.json({
+      reply: response.choices[0].message.content,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "AI error" });
+  }
+});
+
+app.listen(5000, () => {
+  console.log("Backend running on http://localhost:5000");
+});
