@@ -25,7 +25,7 @@ const summaryModal = document.getElementById("summaryModal");
 const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
 // ===== State =====
 let totalSpend = 0;
-let expenses = [];
+// let expenses = [];
 
 // ===== Load Budget =====
 const savedBudget = Number(localStorage.getItem("monthlyBudget")) || 0;
@@ -63,7 +63,8 @@ addBtn.addEventListener("click", () => {
     if(budgetDisplay.innerText === "₹ 0"){
         warnMsg.style.color = "red";
         warnMsg.innerText = "Enter Monthly Budget first";
-    } else if (amount <= 0 || category === "select") {
+    }
+    if (amount <= 0 || category === "select") {
         warnMsg.style.color = "red";
         warnMsg.innerText = "Enter both fields";
         return;
