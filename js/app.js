@@ -1,10 +1,6 @@
 import { renderRecentExpenses } from "./recentExpenses.js";
 import { data } from "./store.js";
 import { generateChart } from "./chart.js";
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import OpenAI from "openai";
 renderRecentExpenses(data);
 
 
@@ -181,41 +177,47 @@ generateChart(data);
 progressFill();
 
 
-dotenv.config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
-// AI Helpbot endpoint
-app.post("/helpbot", async (req, res) => {
-  const userMessage = req.body.message;
+
+// =======================
+// AI HELP BOT INTEGRATION
+// =======================
+
+const askBotBtn = document.getElementById("askBotBtn");
+
+if (askBotBtn) {
+  askBotBtn.addEventListener("click", askBot);
+}
+
+async function askBot() {
+  const input = document.getElementById("botInput");
+  const replyBox = document.getElementById("botReply");
+
+  const question = input.value.trim();
+
+  if (!question) {
+    replyBox.innerText = "Please ask something 🙂";
+    return;
+  }
+
+  replyBox.innerText = "Thinking... 🤔";
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a simple and friendly help bot for an expense tracking app. Give easy saving tips.",
-        },
-        { role: "user", content: userMessage },
-      ],
+    const response = await fetch("http://localhost:5000/helpbot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: question,
+      }),
     });
 
-    res.json({
-      reply: response.choices[0].message.content,
-    });
+    const data = await response.json();
+    replyBox.innerText = data.reply;
   } catch (error) {
-    res.status(500).json({ error: "AI error" });
+    replyBox.innerText = "Bot is not responding 😕";
   }
-});
-
-app.listen(5000, () => {
-  console.log("Backend running on http://localhost:5000");
-});
+}
