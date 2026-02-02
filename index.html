@@ -1,110 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
-    <link rel="icon" href="assets/images/icons8-card-wallet-64.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body>
+    <link
+      rel="icon"
+      href="assets/images/icons8-card-wallet-64.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
     <body>
-    <div id="completeSiteContainer">
+      <div id="completeSiteContainer">
         <!-- Navbar-->
         <div id="navbar">
-            <div id="nameContainer">
-                <img src="assets/images/icons8-card-wallet-64.png" alt="img">
-                <p>Expense Tracker</p>
+          <div id="nameContainer">
+            <img src="assets/images/icons8-card-wallet-64.png" alt="img" />
+            <p>Expense Tracker</p>
+          </div>
+          <div id="monthlyBudget">
+            <input
+              type="text"
+              placeholder="Enter your monthly budget"
+              id="budgetInput"
+            />
+            <button id="setBudget" type="button">Set</button>
+          </div>
+          <div id="linksContainer">
+            <a href="#" id="monthlySummaryLink">Monthly Summary</a>
+            <div id="summaryModal" class="modal">
+              <div class="modal-content">
+                <span class="closeBtn">&times;</span>
+                <h2>Monthly Summary</h2>
+                <div id="item"></div>
+              </div>
             </div>
-            <div id="monthlyBudget">
-                <input type="text" placeholder="Enter your monthly budget" id="budgetInput">
-                <button id="setBudget"  type="button">Set</button> 
-            </div>
-            <div id="linksContainer">
-                <a href="#" id="monthlySummaryLink">Monthly Summary</a>
-                <div id="summaryModal" class="modal">
-                    <div class="modal-content">
-                        <span class="closeBtn">&times;</span>
-                        <h2>Monthly Summary</h2>
-                        <div id="item"></div>
-                    </div>
-                </div>
-                <a href="#">Setting</a>
-                <p>Dark Mode</p>
-            </div>
+            <p>Dark Mode</p>
+          </div>
         </div>
         <!-- Heading -->
         <div id="subHeading">
-            <p class="lineOne">Personal Expense Tracker</p>
-            <p class="secondLine">Track your spending & manage your budget easily</p>
+          <p class="lineOne">Personal Expense Tracker</p>
+          <p class="secondLine">
+            Track your spending & manage your budget easily
+          </p>
         </div>
         <!-- main container -->
         <div id="mainContainer">
-            <div id="inputSection">
-                <span><p>Add New Expense</p></span>
-                
-                <div id="inputFields"> 
-                    <input type="text" placeholder="Amount" id="amountInput">
-                    <select name="category" id="categorySelect">
-                        <option value="" disabled selected>Select Category</option>
-                        <option value="food">Food</option>
-                        <option value="transport">Transport</option>
-                        <option value="entertainment">Entertainment</option>
-                        <option value="utilities">Utilities</option>
-                        <option value="others">Others</option>
-                    </select>
-                    <textarea id="description" name="description" placeholder="Enter description here..." rows="5" cols="40"></textarea>
-                    <h6 id="warning"></h6>
-                    <button id="addExpenses">Add Expense</button>
-                </div>
-            </div>
-            <div id="amountShowing">
-                <div id="monthlySpending">
-                    <p class="title">This Month's Spending</p>
-                    <p class="amount">₹ 0</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-                <div id="budget">
-                    <p class="title">Remaining Amount</p>
-                    <p class="remainingAmount">₹ 0</p>
-                    <p class="title">Monthly Budget</p>
-                    <p class="bgtAmount">₹ 0</p>
-                </div>
-            </div>
-            <div id="chartSection">
-                <h3>Expense Overview</h3>
-                <div class="chart-wrapper">
-                    <div id="barChart"></div>
-                </div>
-            </div>
+          <div id="inputSection">
+            <span><p>Add New Expense</p></span>
 
+            <div id="inputFields">
+              <input type="text" placeholder="Amount" id="amountInput" />
+              <select name="category" id="categorySelect">
+                <option value="" disabled selected>Select Category</option>
+                <option value="food">Food</option>
+                <option value="transport">Transport</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="utilities">Utilities</option>
+                <option value="others">Others</option>
+              </select>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Enter description here..."
+                rows="5"
+                cols="40"
+              ></textarea>
+              <h6 id="warning"></h6>
+              <button id="addExpenses">Add Expense</button>
+            </div>
+          </div>
+          <div id="amountShowing">
+            <div id="monthlySpending">
+              <p class="title">This Month's Spending</p>
+              <p class="amount">₹ 0</p>
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+            </div>
+            <div id="budget">
+              <p class="title">Remaining Amount</p>
+              <p class="remainingAmount">₹ 0</p>
+              <p class="title">Monthly Budget</p>
+              <p class="bgtAmount">₹ 0</p>
+            </div>
+          </div>
+          <div id="chartSection">
+            <h3>Expense Overview</h3>
+            <div class="chart-wrapper">
+              <div id="barChart"></div>
+            </div>
+          </div>
         </div>
         <ul class="expense-list"></ul>
         <div id="recentExpenses">
-            <h3>Recent Expenses</h3>
-            <div id="recentList"></div>
+          <h3>Recent Expenses</h3>
+          <div id="recentList"></div>
         </div>
-
-    </div>
-    <!-- AI Help Bot -->
-        <section id="helpbot-section">
-        <h3>🤖 Expense Help Bot</h3>
-
-        <textarea
-            id="botInput"
-            placeholder="Ask something like: Why are my expenses high?"
-        ></textarea>
-
-        <button id="askBotBtn">Ask Bot</button>
-
-        <p id="botReply"></p>
-        </section>
-
-
-    <script type="module" src="js/store.js"></script>
-    <script type="module" src="js/app.js"></script>
-</body>
-</body>
+      </div>
+      <script type="module" src="js/store.js"></script>
+      <script type="module" src="js/app.js"></script>
+    </body>
+  </body>
 </html>
