@@ -39,86 +39,86 @@ updateRemainingAmount();
 
 // ===== Event Listeners =====
 setBudgetBtn.addEventListener("click", () => {
-  const budgetValue = Number(budgetInput.value);
+    const budgetValue = Number(budgetInput.value);
 
-  if (isNaN(budgetValue) || budgetValue <= 0) {
+    if (isNaN(budgetValue) || budgetValue <= 0){
     alert("Please enter a valid Amount");
     budgetInput.value = "";
     return;
-  }
+    }
 
-  localStorage.setItem("monthlyBudget", budgetValue);
-  budgetDisplay.innerText = `₹ ${budgetValue}`;
-  budgetInput.value = "";
+    localStorage.setItem("monthlyBudget", budgetValue);
+    budgetDisplay.innerText = `₹ ${budgetValue}`;
+    budgetInput.value = "";
 
-  updateRemainingAmount();
+    updateRemainingAmount();
 });
 
 addBtn.addEventListener("click", () => {
-  const amount = Number(spendInput.value);
-  const category = categoryInput.value;
-  const note = noteInput.value || "";
-  const today = new Date().toLocaleDateString("en-IN");
+    const amount = Number(spendInput.value);
+    const category = categoryInput.value;
+    const note = noteInput.value || "";
+    const today = new Date().toLocaleDateString("en-IN");
 
-  if (budgetDisplay.innerText === "₹ 0") {
-    warnMsg.style.color = "red";
-    warnMsg.innerText = "Enter Monthly Budget first";
-  }
-  if (amount <= 0 || category === "select") {
-    warnMsg.style.color = "red";
-    warnMsg.innerText = "Enter both fields";
-    return;
-  } else if (isNaN(amount) || Number(amount) <= 0) {
-    warnMsg.style.color = "red";
-    warnMsg.innerText = "Enter a valid amount";
-    return;
-  }
-  if (Number(amount) >= 0) {
-    warnMsg.innerText = "";
-  }
-  const expense = { amount, category, note, today };
+    if(budgetDisplay.innerText === "₹ 0"){
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter Monthly Budget first";
+    }
+    if (amount <= 0 || category === "select") {
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter both fields";
+        return;
+    } else if (isNaN(amount) || Number(amount) <= 0) {
+        warnMsg.style.color = "red";
+        warnMsg.innerText = "Enter a valid amount";
+        return;
+    }
+    if(Number(amount) >= 0){
+        warnMsg.innerText = "";
+    }
+    const expense = { amount, category, note, today};
 
-  addExpense(expense);
+    addExpense(expense);
 
-  spendInput.value = "";
-  categoryInput.value = "";
-  noteInput.value = "";
+    spendInput.value = "";
+    categoryInput.value = "";
+    noteInput.value = "";
 });
 
 // ===== Functions =====
 function addExpense(expense) {
-  data.push(expense);
-  localStorage.setItem("data", JSON.stringify(data));
+    data.push(expense);
+    localStorage.setItem("data", JSON.stringify(data));
 
-  totalSpend += expense.amount;
-  updateTotalDisplay();
-  updateRemainingAmount();
-  renderExpense(expense);
-  generateChart(data);
-  progressFill();
-  renderRecentExpenses(data);
+    totalSpend += expense.amount;
+    updateTotalDisplay();
+    updateRemainingAmount();
+    renderExpense(expense);
+    generateChart(data);
+    progressFill();
+    renderRecentExpenses(data);
 
 }
 
 function updateTotalDisplay() {
-  totalDisplay.innerText = `₹ ${totalSpend}`;
+    totalDisplay.innerText = `₹ ${totalSpend}`;
 }
 
 function updateRemainingAmount() {
-  const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
-  const remaining = budgetValue - totalSpend;
+    const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
+    const remaining = budgetValue - totalSpend;
 
-  localStorage.setItem("remainAmount", remaining);
-  remAmount.innerText = `₹ ${remaining}`;
-  if (remaining < 0) {
+    localStorage.setItem("remainAmount", remaining);
+    remAmount.innerText = `₹ ${remaining}`;
+    if (remaining < 0) {
     remAmount.style.color = "red";
-  }
+    }
 
 }
 
 function renderExpenses() {
-  expenseList.innerHTML = "";
-  data.forEach(exp => renderExpense(exp));
+    expenseList.innerHTML = "";
+    data.forEach(exp => renderExpense(exp));
 }
 function renderExpense(expense) {
   const modalItem = document.createElement("div");
@@ -168,7 +168,7 @@ darkModeToggle.addEventListener("click", () => {
 
 
 
-function progressFill() {
+function progressFill(){
   const progressFill = document.querySelector(".progress-fill");
   const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
   progressFill.style.width = `${(totalSpend / budgetValue) * 100}%`
@@ -181,4 +181,47 @@ progressFill();
 
 
 
-// AI help bot removed
+// =======================
+// AI HELP BOT INTEGRATION
+// =======================
+
+const askBotBtn = document.getElementById("askBotBtn");
+
+if (askBotBtn) {
+  askBotBtn.addEventListener("click", askBot);
+}
+
+async function askBot() {
+  const input = document.getElementById("botInput");
+  const replyBox = document.getElementById("botReply");
+
+  const question = input.value.trim();
+
+  if (!question) {
+    replyBox.innerText = "Please ask something 🙂";
+    return;
+  }
+
+  replyBox.innerText = "Thinking... 🤔";
+
+  try {
+    const response = await fetch("http://localhost:5000/api/helpbot", {  // ← URL updated
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: question,
+      }),
+    });
+
+    const data = await response.json();
+    replyBox.innerText = data.reply;
+  } catch (error) {
+    console.error(error);
+    replyBox.innerText = "Bot is not responding 😕";
+  }
+}
+
+// Button click event
+document.getElementById("askBotBtn").addEventListener("click", askBot);
