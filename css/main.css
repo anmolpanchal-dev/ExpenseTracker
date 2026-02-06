@@ -497,17 +497,18 @@ button {
 
 .modal {
   position: fixed;
-  inset: 0;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
   z-index: 2000;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; /* vertically centers modal */
+  background: rgba(0, 0, 0, 0.4); /* semi-transparent overlay */
 }
 
 .modal-content {
   background: var(--bg-card);
   width: 90%;
-  margin-top: 200px;
+  margin-top: 700px;
   max-width: 500px;
   border-radius: var(--radius-xl);
   padding: 30px;
@@ -517,6 +518,7 @@ button {
   max-height: 80vh;
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* so content scrolls if too long */
 }
 
 @keyframes slideUp {
@@ -529,6 +531,7 @@ button {
     transform: translateY(0) scale(1);
   }
 }
+
 
 .modal-content h2 {
   font-size: 1.5rem;
@@ -608,6 +611,12 @@ body.dark-mode #item .displayItem:hover {
   }
   #chartSection {
     grid-column: span 2;
+  }
+}
+@media (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    padding: 20px;
   }
 }
 
