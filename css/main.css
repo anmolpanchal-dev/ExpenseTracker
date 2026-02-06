@@ -507,14 +507,14 @@ button {
 .modal-content {
   background: var(--bg-card);
   width: 90%;
-  margin-top: 700px;
+  margin-top: 500px;
   max-width: 500px;
   border-radius: var(--radius-xl);
   padding: 30px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: slideUp 0.3s ease-out;
   border: 1px solid var(--border);
-  max-height: 80vh;
+  max-height: 72vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* so content scrolls if too long */
