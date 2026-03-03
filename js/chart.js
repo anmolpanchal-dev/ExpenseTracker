@@ -46,7 +46,10 @@ export function generateChart(monthExpenses) {
     const percentage = totalAmount > 0 ? (amount / totalAmount) * 100 : 0;
     const txns = categoryCounts[category] || 0;
 
-    bar.style.height = `${Math.max((amount / maxAmount) * 100, 14)}%`;
+    const normalized = amount / maxAmount;
+    const boostedHeight = 28 + Math.pow(normalized, 0.65) * 72;
+    const finalHeight = Math.min(boostedHeight, 100);
+    bar.style.height = `${finalHeight}%`;
     bar.style.background = `linear-gradient(180deg, ${start}, ${end})`;
     bar.innerHTML = `
       <span class="bar-value">Rs ${amount.toLocaleString("en-IN")}</span>

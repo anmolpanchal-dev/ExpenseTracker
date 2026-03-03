@@ -46,7 +46,6 @@ const summaryModal = document.getElementById("summaryModal");
 const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
 
 const darkModeToggle = document.querySelector("#linksContainer p");
-const progressFillElement = document.querySelector(".progress-fill");
 const progressRing = document.querySelector("#progressRing");
 const progressPercent = document.querySelector("#progressPercent");
 const remainingCard = document.querySelector("#remainingCard");
@@ -146,7 +145,6 @@ function updateHeaderValues() {
   remainingCard.classList.toggle("over-budget", remaining < 0);
 
   const boundedProgress = Math.min(progress, 100);
-  progressFillElement.style.width = `${boundedProgress}%`;
   const ringColor = progress > 100 ? "var(--danger)" : progress > 80 ? "#edb040" : "var(--success)";
   progressRing.style.background = `conic-gradient(${ringColor} ${boundedProgress}%, rgba(148, 163, 184, 0.25) ${boundedProgress}%)`;
   animateNumber(progressPercent, progress, false);
