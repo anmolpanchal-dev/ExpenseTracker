@@ -65,6 +65,19 @@ function debounce(fn, wait = 250) {
   };
 }
 
+function bindEnterToButton(inputElement, buttonElement, options = {}) {
+  if (!inputElement || !buttonElement) return;
+  const { ctrlOrMetaOnly = false } = options;
+
+  inputElement.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter") return;
+    if (ctrlOrMetaOnly && !(event.ctrlKey || event.metaKey)) return;
+
+    event.preventDefault();
+    buttonElement.click();
+  });
+}
+
 function sanitizeAmountInput(inputElement) {
   inputElement.value = inputElement.value.replace(/[^\d.]/g, "");
 }
@@ -334,6 +347,12 @@ spendInput.addEventListener(
   "input",
   debounce(() => sanitizeAmountInput(spendInput), 150),
 );
+
+bindEnterToButton(budgetInput, setBudgetBtn);
+bindEnterToButton(spendInput, addBtn);
+bindEnterToButton(dateInput, addBtn);
+bindEnterToButton(categoryInput, addBtn);
+bindEnterToButton(noteInput, addBtn, { ctrlOrMetaOnly: true });
 
 function startMonthWatcher() {
   setInterval(() => {
