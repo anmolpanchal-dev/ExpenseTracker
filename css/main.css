@@ -627,6 +627,20 @@ body.dark-mode #item .displayItem:hover {
   margin-top: 4px;
 }
 
+#item .summary-section .category {
+  margin-bottom: 6px;
+}
+
+#item .summary-date-heading {
+  margin-top: 10px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+#item .summary-line-item {
+  margin-left: 10px;
+}
+
 /* ==================================================
    10. MEDIA QUERIES
 ================================================== */

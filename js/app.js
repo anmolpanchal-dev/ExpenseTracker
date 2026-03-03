@@ -5,7 +5,6 @@ import {
   getCurrentMonthYear,
   getExpensesByMonth,
   getMonthKey,
-  getMonthSummaries,
   setBudget,
 } from "./store.js";
 import { renderRecentExpenses } from "./recentExpenses.js";
@@ -60,6 +59,14 @@ function formatMonthInput(month, year) {
   return `${year}-${String(month).padStart(2, "0")}`;
 }
 
+function formatLongDate(dateString) {
+  return new Date(`${dateString}T00:00:00`).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 function parseDateToMonthYear(dateValue) {
   const dateObj = new Date(`${dateValue}T00:00:00`);
   return {
@@ -87,32 +94,63 @@ function updateHeaderValues() {
 }
 
 function renderMonthlySummary() {
-  const summaries = getMonthSummaries();
-  summaryModalContent.innerHTML = "";
+  const monthExpenses = getExpensesByMonth(selectedMonth.month, selectedMonth.year);
+  const budgetAmount = getBudget(selectedMonth.month, selectedMonth.year);
+  const totalSpent = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const remaining = budgetAmount - totalSpent;
+  const progress = budgetAmount > 0 ? (totalSpent / budgetAmount) * 100 : 0;
 
-  if (summaries.length === 0) {
+  const dateGroups = new Map();
+  monthExpenses.forEach((expense) => {
+    if (!dateGroups.has(expense.date)) {
+      dateGroups.set(expense.date, []);
+    }
+    dateGroups.get(expense.date).push(expense);
+  });
+
+  const sortedDateKeys = [...dateGroups.keys()].sort((a, b) => new Date(b) - new Date(a));
+
+  summaryModalContent.innerHTML = "";
+  const monthTitle = `${MONTH_NAMES[selectedMonth.month - 1]} ${selectedMonth.year}`;
+
+  const overviewSection = document.createElement("div");
+  overviewSection.className = "displayItem summary-section";
+  overviewSection.innerHTML = `
+    <div class="category">${monthTitle}</div>
+    <div class="note">Budget: ${formatCurrency(budgetAmount)}</div>
+    <div class="note">Total Spent: ${formatCurrency(totalSpent)}</div>
+    <div class="note">Remaining: ${formatCurrency(remaining)}</div>
+    <div class="note">Progress: ${progress.toFixed(1)}%</div>
+  `;
+  summaryModalContent.appendChild(overviewSection);
+
+  const detailsSection = document.createElement("div");
+  detailsSection.className = "displayItem summary-section";
+  detailsSection.innerHTML = `<div class="category">Date-wise Detailed Record</div>`;
+
+  if (sortedDateKeys.length === 0) {
     const empty = document.createElement("div");
-    empty.className = "displayItem";
-    empty.innerHTML = `<div class="note">No month history yet</div>`;
-    summaryModalContent.appendChild(empty);
-    return;
+    empty.className = "note";
+    empty.innerText = "No records for this month";
+    detailsSection.appendChild(empty);
+  } else {
+    sortedDateKeys.forEach((dateKey) => {
+      const dateHeading = document.createElement("div");
+      dateHeading.className = "note summary-date-heading";
+      dateHeading.innerText = formatLongDate(dateKey);
+      detailsSection.appendChild(dateHeading);
+
+      const expensesForDate = [...dateGroups.get(dateKey)].sort((a, b) => b.timestamp - a.timestamp);
+      expensesForDate.forEach((expense) => {
+        const item = document.createElement("div");
+        item.className = "note summary-line-item";
+        item.innerText = `- ${expense.category}: ${formatCurrency(expense.amount)}`;
+        detailsSection.appendChild(item);
+      });
+    });
   }
 
-  summaries.forEach((summary) => {
-    const item = document.createElement("div");
-    item.className = "displayItem";
-
-    const monthTitle = `${MONTH_NAMES[summary.month - 1]} ${summary.year}`;
-    const progress = summary.budgetAmount > 0 ? `${summary.progress.toFixed(1)}%` : "0%";
-
-    item.innerHTML = `
-      <div class="category">${monthTitle}</div>
-      <div class="amount2">Spent: ${formatCurrency(summary.total)}</div>
-      <div class="note">Budget: ${formatCurrency(summary.budgetAmount)} | Remaining: ${formatCurrency(summary.remaining)} | Progress: ${progress}</div>
-    `;
-
-    summaryModalContent.appendChild(item);
-  });
+  summaryModalContent.appendChild(detailsSection);
 }
 
 function syncMonthSelectionUI() {
@@ -173,6 +211,7 @@ addBtn.addEventListener("click", () => {
     category,
     note,
     date: selectedDate,
+    timestamp: Date.now(),
   });
 
   if (

@@ -39,12 +39,14 @@ function parseLegacyToday(today) {
 
 function normalizeExpense(expense) {
   const normalized = {
+    id: String(expense?.id || ""),
     amount: Number(expense?.amount) || 0,
     category: expense?.category || "others",
     note: expense?.note || "",
     date: "",
     month: Number(expense?.month) || 0,
     year: Number(expense?.year) || 0,
+    timestamp: Number(expense?.timestamp) || 0,
   };
 
   let dateObj = null;
@@ -68,6 +70,8 @@ function normalizeExpense(expense) {
   normalized.date = toISODate(dateObj);
   normalized.month = dateObj.getMonth() + 1;
   normalized.year = dateObj.getFullYear();
+  normalized.timestamp = normalized.timestamp || dateObj.getTime();
+  normalized.id = normalized.id || `${normalized.timestamp}-${Math.random().toString(16).slice(2, 8)}`;
 
   return normalized;
 }
@@ -91,6 +95,9 @@ const rawBudgets = parseJSON(BUDGETS_KEY, []);
 export let budgets = rawBudgets.map(normalizeBudget).filter((budget) => budget.month > 0 && budget.year > 0);
 
 if (!rawExpenses && legacyExpenses.length > 0) {
+  localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
+}
+if (rawExpenses) {
   localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses));
 }
 
