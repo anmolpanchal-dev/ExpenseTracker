@@ -1,177 +1,243 @@
+import {
+  addExpense,
+  ensureBudgetRecord,
+  getBudget,
+  getCurrentMonthYear,
+  getExpensesByMonth,
+  getMonthKey,
+  getMonthSummaries,
+  setBudget,
+} from "./store.js";
 import { renderRecentExpenses } from "./recentExpenses.js";
-import { data } from "./store.js";
 import { generateChart } from "./chart.js";
-renderRecentExpenses(data);
 
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
-// ===== DOM Elements =====
 const budgetInput = document.querySelector("#budgetInput");
 const budgetDisplay = document.querySelector(".bgtAmount");
 const warnMsg = document.querySelector("#warning");
 
 const spendInput = document.querySelector("#amountInput");
+const dateInput = document.querySelector("#dateInput");
 const categoryInput = document.querySelector("#categorySelect");
 const noteInput = document.querySelector("#description");
 const addBtn = document.querySelector("#addExpenses");
 
 const totalDisplay = document.querySelector(".amount");
-const expenseList = document.querySelector(".expense-list");
 const remAmount = document.querySelector(".remainingAmount");
 const setBudgetBtn = document.querySelector("#setBudget");
+const monthPicker = document.querySelector("#monthPicker");
 const summaryModalContent = document.querySelector("#item");
 
 const summaryLink = document.getElementById("monthlySummaryLink");
 const summaryModal = document.getElementById("summaryModal");
 const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
-// ===== State =====
-let totalSpend = 0;
-// let expenses = [];
 
-// ===== Load Budget =====
-const savedBudget = Number(localStorage.getItem("monthlyBudget")) || 0;
-budgetDisplay.innerText = `₹ ${savedBudget}`;
+const darkModeToggle = document.querySelector("#linksContainer p");
+const progressFillElement = document.querySelector(".progress-fill");
 
-// ===== Load Expenses & Total =====
-data.forEach(exp => totalSpend += exp.amount);
-updateTotalDisplay();
-renderExpenses();
-updateRemainingAmount();
+let selectedMonth = getCurrentMonthYear();
+let activeCurrentMonthKey = getMonthKey(selectedMonth.month, selectedMonth.year);
 
-// ===== Event Listeners =====
+function formatCurrency(value) {
+  return `Rs ${Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+}
+
+function formatMonthInput(month, year) {
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+function parseDateToMonthYear(dateValue) {
+  const dateObj = new Date(`${dateValue}T00:00:00`);
+  return {
+    month: dateObj.getMonth() + 1,
+    year: dateObj.getFullYear(),
+  };
+}
+
+function updateHeaderValues() {
+  const monthExpenses = getExpensesByMonth(selectedMonth.month, selectedMonth.year);
+  const totalSpend = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const budgetValue = getBudget(selectedMonth.month, selectedMonth.year);
+  const remaining = budgetValue - totalSpend;
+  const progress = budgetValue > 0 ? (totalSpend / budgetValue) * 100 : 0;
+
+  totalDisplay.innerText = formatCurrency(totalSpend);
+  budgetDisplay.innerText = formatCurrency(budgetValue);
+  remAmount.innerText = formatCurrency(remaining);
+  remAmount.style.color = remaining < 0 ? "red" : "";
+
+  progressFillElement.style.width = `${Math.min(progress, 100)}%`;
+
+  generateChart(monthExpenses);
+  renderRecentExpenses(monthExpenses);
+}
+
+function renderMonthlySummary() {
+  const summaries = getMonthSummaries();
+  summaryModalContent.innerHTML = "";
+
+  if (summaries.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "displayItem";
+    empty.innerHTML = `<div class="note">No month history yet</div>`;
+    summaryModalContent.appendChild(empty);
+    return;
+  }
+
+  summaries.forEach((summary) => {
+    const item = document.createElement("div");
+    item.className = "displayItem";
+
+    const monthTitle = `${MONTH_NAMES[summary.month - 1]} ${summary.year}`;
+    const progress = summary.budgetAmount > 0 ? `${summary.progress.toFixed(1)}%` : "0%";
+
+    item.innerHTML = `
+      <div class="category">${monthTitle}</div>
+      <div class="amount2">Spent: ${formatCurrency(summary.total)}</div>
+      <div class="note">Budget: ${formatCurrency(summary.budgetAmount)} | Remaining: ${formatCurrency(summary.remaining)} | Progress: ${progress}</div>
+    `;
+
+    summaryModalContent.appendChild(item);
+  });
+}
+
+function syncMonthSelectionUI() {
+  monthPicker.value = formatMonthInput(selectedMonth.month, selectedMonth.year);
+  ensureBudgetRecord(selectedMonth.month, selectedMonth.year);
+  updateHeaderValues();
+  renderMonthlySummary();
+}
+
+function initializeDateInput() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  dateInput.value = `${year}-${month}-${day}`;
+}
+
 setBudgetBtn.addEventListener("click", () => {
-    const budgetValue = Number(budgetInput.value);
+  const budgetValue = Number(budgetInput.value);
 
-    if (isNaN(budgetValue) || budgetValue <= 0){
-    alert("Please enter a valid Amount");
+  if (Number.isNaN(budgetValue) || budgetValue < 0) {
+    alert("Please enter a valid budget amount");
     budgetInput.value = "";
     return;
-    }
+  }
 
-    localStorage.setItem("monthlyBudget", budgetValue);
-    budgetDisplay.innerText = `₹ ${budgetValue}`;
-    budgetInput.value = "";
-
-    updateRemainingAmount();
+  setBudget(selectedMonth.month, selectedMonth.year, budgetValue);
+  budgetInput.value = "";
+  updateHeaderValues();
+  renderMonthlySummary();
 });
 
 addBtn.addEventListener("click", () => {
-    const amount = Number(spendInput.value);
-    const category = categoryInput.value;
-    const note = noteInput.value || "";
-    const today = new Date().toLocaleDateString("en-IN");
+  const amount = Number(spendInput.value);
+  const category = categoryInput.value;
+  const note = noteInput.value || "";
+  const selectedDate = dateInput.value;
 
-    if(budgetDisplay.innerText === "₹ 0"){
-        warnMsg.style.color = "red";
-        warnMsg.innerText = "Enter Monthly Budget first";
-    }
-    if (amount <= 0 || category === "select") {
-        warnMsg.style.color = "red";
-        warnMsg.innerText = "Enter both fields";
-        return;
-    } else if (isNaN(amount) || Number(amount) <= 0) {
-        warnMsg.style.color = "red";
-        warnMsg.innerText = "Enter a valid amount";
-        return;
-    }
-    if(Number(amount) >= 0){
-        warnMsg.innerText = "";
-    }
-    const expense = { amount, category, note, today};
+  if (!selectedDate) {
+    warnMsg.style.color = "red";
+    warnMsg.innerText = "Select date";
+    return;
+  }
 
-    addExpense(expense);
+  if (Number.isNaN(amount) || amount <= 0 || !category) {
+    warnMsg.style.color = "red";
+    warnMsg.innerText = "Enter valid amount and category";
+    return;
+  }
 
-    spendInput.value = "";
-    categoryInput.value = "";
-    noteInput.value = "";
+  warnMsg.innerText = "";
+
+  const expenseMonthYear = parseDateToMonthYear(selectedDate);
+  ensureBudgetRecord(expenseMonthYear.month, expenseMonthYear.year);
+
+  addExpense({
+    amount,
+    category,
+    note,
+    date: selectedDate,
+  });
+
+  if (
+    expenseMonthYear.month !== selectedMonth.month ||
+    expenseMonthYear.year !== selectedMonth.year
+  ) {
+    warnMsg.style.color = "#f59e0b";
+    warnMsg.innerText = `Expense saved in ${MONTH_NAMES[expenseMonthYear.month - 1]} ${expenseMonthYear.year}`;
+  }
+
+  spendInput.value = "";
+  categoryInput.value = "";
+  noteInput.value = "";
+
+  updateHeaderValues();
+  renderMonthlySummary();
 });
 
-// ===== Functions =====
-function addExpense(expense) {
-    data.push(expense);
-    localStorage.setItem("data", JSON.stringify(data));
+monthPicker.addEventListener("change", (event) => {
+  const value = event.target.value;
+  if (!value) return;
 
-    totalSpend += expense.amount;
-    updateTotalDisplay();
-    updateRemainingAmount();
-    renderExpense(expense);
-    generateChart(data);
-    progressFill();
-    renderRecentExpenses(data);
+  const [year, month] = value.split("-").map(Number);
+  selectedMonth = { month, year };
+  syncMonthSelectionUI();
+});
 
-}
-
-function updateTotalDisplay() {
-    totalDisplay.innerText = `₹ ${totalSpend}`;
-}
-
-function updateRemainingAmount() {
-    const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
-    const remaining = budgetValue - totalSpend;
-
-    localStorage.setItem("remainAmount", remaining);
-    remAmount.innerText = `₹ ${remaining}`;
-    if (remaining < 0) {
-    remAmount.style.color = "red";
-    }
-
-}
-
-function renderExpenses() {
-    expenseList.innerHTML = "";
-    data.forEach(exp => renderExpense(exp));
-}
-function renderExpense(expense) {
-  const modalItem = document.createElement("div");
-  modalItem.className = "displayItem";
-  modalItem.innerHTML = `
-    <div class="category">${expense.category}</div>
-    <div class="amount2">₹ ${expense.amount}</div>
-    <div class="note">${expense.note}</div>
-    <div >${expense.today}</div>
-  `;
-  summaryModalContent.prepend(modalItem);
-}
-
-
-
-
-// Open modal
-summaryLink.addEventListener("click", (e) => {
-  e.preventDefault();
+summaryLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  renderMonthlySummary();
   summaryModal.style.display = "flex";
 });
 
-// Close modal with X
 closeSummaryBtn.addEventListener("click", () => {
   summaryModal.style.display = "none";
 });
 
-// Close modal when clicking outside content
-window.addEventListener("click", (e) => {
-  if (e.target === summaryModal) {
+window.addEventListener("click", (event) => {
+  if (event.target === summaryModal) {
     summaryModal.style.display = "none";
   }
 });
 
-
-const darkModeToggle = document.querySelector("#linksContainer p"); // Dark Mode <p>
-
 darkModeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
-
-  if (document.body.classList.contains("dark-mode")) {
-    darkModeToggle.innerText = "Light Mode";
-  } else {
-    darkModeToggle.innerText = "Dark Mode";
-  }
+  darkModeToggle.innerText = document.body.classList.contains("dark-mode")
+    ? "Light Mode"
+    : "Dark Mode";
 });
 
+function startMonthWatcher() {
+  setInterval(() => {
+    const current = getCurrentMonthYear();
+    const currentKey = getMonthKey(current.month, current.year);
 
-
-function progressFill(){
-  const progressFill = document.querySelector(".progress-fill");
-  const budgetValue = Number(localStorage.getItem("monthlyBudget")) || 0;
-  progressFill.style.width = `${(totalSpend / budgetValue) * 100}%`
+    if (currentKey !== activeCurrentMonthKey) {
+      activeCurrentMonthKey = currentKey;
+      ensureBudgetRecord(current.month, current.year);
+      selectedMonth = current;
+      syncMonthSelectionUI();
+    }
+  }, 60_000);
 }
-generateChart(data);
-progressFill();
+
+ensureBudgetRecord(selectedMonth.month, selectedMonth.year);
+initializeDateInput();
+syncMonthSelectionUI();
+startMonthWatcher();
