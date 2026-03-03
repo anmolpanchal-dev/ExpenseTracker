@@ -47,9 +47,53 @@ const closeSummaryBtn = summaryModal.querySelector(".closeBtn");
 
 const darkModeToggle = document.querySelector("#linksContainer p");
 const progressFillElement = document.querySelector(".progress-fill");
+const progressRing = document.querySelector("#progressRing");
+const progressPercent = document.querySelector("#progressPercent");
+const remainingCard = document.querySelector("#remainingCard");
+const mainArea = document.querySelector("#mainArea");
+const mobileBottomNav = document.querySelector("#mobileBottomNav");
 
 let selectedMonth = getCurrentMonthYear();
 let activeCurrentMonthKey = getMonthKey(selectedMonth.month, selectedMonth.year);
+let countersReady = false;
+
+function debounce(fn, wait = 250) {
+  let timerId;
+  return (...args) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => fn(...args), wait);
+  };
+}
+
+function sanitizeAmountInput(inputElement) {
+  inputElement.value = inputElement.value.replace(/[^\d.]/g, "");
+}
+
+function animateNumber(element, target, asCurrency = true) {
+  const endValue = Number(target) || 0;
+  if (!countersReady) {
+    element.innerText = asCurrency ? formatCurrency(endValue) : `${endValue.toFixed(1)}%`;
+    element.dataset.value = String(endValue);
+    return;
+  }
+
+  const startValue = Number(element.dataset.value || 0);
+  const duration = 420;
+  const startTime = performance.now();
+
+  const tick = (now) => {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const current = startValue + (endValue - startValue) * progress;
+    element.innerText = asCurrency ? formatCurrency(current) : `${current.toFixed(1)}%`;
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      element.dataset.value = String(endValue);
+    }
+  };
+
+  requestAnimationFrame(tick);
+}
 
 function formatCurrency(value) {
   return `Rs ${Number(value || 0).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
@@ -82,12 +126,17 @@ function updateHeaderValues() {
   const remaining = budgetValue - totalSpend;
   const progress = budgetValue > 0 ? (totalSpend / budgetValue) * 100 : 0;
 
-  totalDisplay.innerText = formatCurrency(totalSpend);
-  budgetDisplay.innerText = formatCurrency(budgetValue);
-  remAmount.innerText = formatCurrency(remaining);
-  remAmount.style.color = remaining < 0 ? "red" : "";
+  animateNumber(totalDisplay, totalSpend, true);
+  animateNumber(budgetDisplay, budgetValue, true);
+  animateNumber(remAmount, remaining, true);
+  remAmount.style.color = remaining < 0 ? "var(--danger)" : "";
+  remainingCard.classList.toggle("over-budget", remaining < 0);
 
-  progressFillElement.style.width = `${Math.min(progress, 100)}%`;
+  const boundedProgress = Math.min(progress, 100);
+  progressFillElement.style.width = `${boundedProgress}%`;
+  const ringColor = progress > 100 ? "var(--danger)" : progress > 80 ? "#edb040" : "var(--success)";
+  progressRing.style.background = `conic-gradient(${ringColor} ${boundedProgress}%, rgba(148, 163, 184, 0.25) ${boundedProgress}%)`;
+  animateNumber(progressPercent, progress, false);
 
   generateChart(monthExpenses);
   renderRecentExpenses(monthExpenses);
@@ -154,6 +203,9 @@ function renderMonthlySummary() {
 }
 
 function syncMonthSelectionUI() {
+  mainArea.classList.remove("section-enter");
+  void mainArea.offsetWidth;
+  mainArea.classList.add("section-enter");
   monthPicker.value = formatMonthInput(selectedMonth.month, selectedMonth.year);
   ensureBudgetRecord(selectedMonth.month, selectedMonth.year);
   updateHeaderValues();
@@ -262,6 +314,27 @@ darkModeToggle.addEventListener("click", () => {
     : "Dark Mode";
 });
 
+if (mobileBottomNav) {
+  mobileBottomNav.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetId = button.getAttribute("data-target");
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+}
+
+budgetInput.addEventListener(
+  "input",
+  debounce(() => sanitizeAmountInput(budgetInput), 150),
+);
+spendInput.addEventListener(
+  "input",
+  debounce(() => sanitizeAmountInput(spendInput), 150),
+);
+
 function startMonthWatcher() {
   setInterval(() => {
     const current = getCurrentMonthYear();
@@ -279,4 +352,5 @@ function startMonthWatcher() {
 ensureBudgetRecord(selectedMonth.month, selectedMonth.year);
 initializeDateInput();
 syncMonthSelectionUI();
+countersReady = true;
 startMonthWatcher();

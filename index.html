@@ -4,105 +4,109 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
-    <link
-      rel="icon"
-      href="assets/images/icons8-card-wallet-64.png"
-      type="image/x-icon"
-    />
+    <link rel="icon" href="assets/images/icons8-card-wallet-64.png" type="image/x-icon" />
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
-    <div id="completeSiteContainer">
-      <div id="navbar">
+    <div id="appShell">
+      <aside id="sidebar">
         <div id="nameContainer">
-          <img src="assets/images/icons8-card-wallet-64.png" alt="img" />
+          <img src="assets/images/icons8-card-wallet-64.png" alt="Wallet icon" />
           <p>Expense Tracker</p>
         </div>
-        <div id="monthSelector">
+
+        <div id="monthSelector" class="card">
           <label for="monthPicker">Month</label>
           <input type="month" id="monthPicker" />
         </div>
-        <div id="monthlyBudget">
-          <input
-            type="text"
-            placeholder="Set budget for selected month"
-            id="budgetInput"
-          />
-          <button id="setBudget" type="button">Set</button>
+
+        <div id="monthlyBudget" class="card">
+          <input type="text" placeholder="Set budget for selected month" id="budgetInput" />
+          <button id="setBudget" type="button">Set Budget</button>
         </div>
-        <div id="linksContainer">
+
+        <div id="linksContainer" class="card">
           <a href="#" id="monthlySummaryLink">Monthly Summary</a>
-          <div id="summaryModal" class="modal">
-            <div class="modal-content">
-              <span class="closeBtn">&times;</span>
-              <h2>Monthly Summary</h2>
-              <div id="item"></div>
-            </div>
-          </div>
-          <p>Dark Mode</p>
+          <p id="themeToggle">Dark Mode</p>
         </div>
-      </div>
+      </aside>
 
-      <div id="subHeading">
-        <p class="lineOne">Personal Expense Tracker</p>
-        <p class="secondLine">Track your spending & manage your budget easily</p>
-      </div>
+      <main id="mainArea">
+        <section id="subHeading">
+          <p class="lineOne">Personal Expense Tracker</p>
+          <p class="secondLine">Track your spending and manage your budget easily</p>
+        </section>
 
-      <div id="mainContainer">
-        <div id="inputSection">
-          <span><p>Add New Expense</p></span>
-
-          <div id="inputFields">
-            <input type="text" placeholder="Amount" id="amountInput" />
-            <input type="date" id="dateInput" />
-            <select name="category" id="categorySelect">
-              <option value="" disabled selected>Select Category</option>
-              <option value="food">Food</option>
-              <option value="transport">Transport</option>
-              <option value="entertainment">Entertainment</option>
-              <option value="utilities">Utilities</option>
-              <option value="others">Others</option>
-            </select>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Enter description here..."
-              rows="5"
-              cols="40"
-            ></textarea>
-            <h6 id="warning"></h6>
-            <button id="addExpenses">Add Expense</button>
+        <section id="summaryCards">
+          <div id="budgetCard" class="metric-card">
+            <p class="title">Selected Month Budget</p>
+            <p class="bgtAmount">Rs 0</p>
           </div>
-        </div>
 
-        <div id="amountShowing">
-          <div id="monthlySpending">
+          <div id="monthlySpending" class="metric-card">
             <p class="title">Selected Month Spending</p>
             <p class="amount">Rs 0</p>
+            <div class="progress-ring-wrap">
+              <div id="progressRing" class="progress-ring"><span id="progressPercent">0%</span></div>
+            </div>
             <div class="progress-bar">
               <div class="progress-fill"></div>
             </div>
           </div>
-          <div id="budget">
+
+          <div id="remainingCard" class="metric-card">
             <p class="title">Remaining Amount</p>
             <p class="remainingAmount">Rs 0</p>
-            <p class="title">Selected Month Budget</p>
-            <p class="bgtAmount">Rs 0</p>
           </div>
-        </div>
+        </section>
 
-        <div id="chartSection">
-          <h3>Expense Overview</h3>
-          <div class="chart-wrapper">
-            <div id="barChart"></div>
+        <section id="dashboardGrid">
+          <div id="inputSection" class="card section-enter">
+            <span><p>Add New Expense</p></span>
+            <div id="inputFields">
+              <input type="text" placeholder="Amount" id="amountInput" />
+              <input type="date" id="dateInput" />
+              <select name="category" id="categorySelect">
+                <option value="" disabled selected>Select Category</option>
+                <option value="food">Food</option>
+                <option value="transport">Transport</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="utilities">Utilities</option>
+                <option value="shopping">Shopping</option>
+                <option value="others">Others</option>
+              </select>
+              <textarea id="description" name="description" placeholder="Enter description here..." rows="4"></textarea>
+              <h6 id="warning"></h6>
+              <button id="addExpenses">Add Expense</button>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <ul class="expense-list"></ul>
-      <div id="recentExpenses">
-        <h3>Recent Expenses</h3>
-        <div id="recentList"></div>
+          <div id="chartSection" class="card section-enter">
+            <h3>Expense Overview</h3>
+            <div class="chart-wrapper">
+              <div id="barChart"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="recentExpenses" class="card section-enter">
+          <h3>Date-wise Expenses</h3>
+          <div id="recentList"></div>
+        </section>
+      </main>
+    </div>
+
+    <nav id="mobileBottomNav" aria-label="Mobile Navigation">
+      <button type="button" data-target="summaryCards">Dashboard</button>
+      <button type="button" data-target="inputSection">Add Expense</button>
+      <button type="button" data-target="recentExpenses">Summary</button>
+    </nav>
+
+    <div id="summaryModal" class="modal">
+      <div class="modal-content">
+        <span class="closeBtn">&times;</span>
+        <h2>Monthly Summary</h2>
+        <div id="item"></div>
       </div>
     </div>
 
